@@ -1,5 +1,3 @@
-# pylint: disable-msg=E0611
-# pylint: disable wildcard-import
 from PyQt5 import QtWidgets        
 from PyQt5.QtCore import QTime, QTimer
 from Parte_Gráfica.VentanaPresiónDiseño import Ui_NewWindoe

@@ -232,3 +232,6 @@ if __name__ == "__main__":
    window = MainWindow1()
    window.show()
    app.exec_()
+   
+# pylint: disable-msg=E0611
+# pylint: disable wildcard-import
