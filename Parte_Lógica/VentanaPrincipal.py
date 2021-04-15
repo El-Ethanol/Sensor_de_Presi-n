@@ -1,5 +1,4 @@
-# pylint: disable-msg=E0611
-# pylint: disable wildcard-import
+#Parte Lógica de la Ventana Principal
 
 import time
 import pyqtgraph as pg
@@ -8,54 +7,63 @@ import pandas as pd
 import serial as ser
 import os
 from Parte_Gráfica.VentanaPresiónDiseño import WindowPresion
+from Parte_Lógica.VentanaPresión import Ui_MainWindow
 from PyQt5 import QtWidgets        
-from PyQt5.QtCore import pyqtSignal, QTimer
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMessageBox, QAction
 from pyqtgraph.Qt import QtGui
-from Parte_Lógica.VentanaPresión import Ui_MainWindow
 
-
-pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
-if pSerial.is_open:
-    pSerial.close()
-pSerial.open()
-pSerial.flushInput()
-pSerial.flushOutput()
 x='@249DL?;FF'
 y=[]
 Xm = []    
 ptr = 0
 t=[]
 
-class MainWindow1(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
-     
-      stop_signal = pyqtSignal()
+class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
      
       def __init__(self, parent=None):
-         super(MainWindow1, self).__init__(parent)
+         super(MainWindow, self).__init__(parent)
          self.setupUi(self)
          self.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(35, 35, 35);") 
          self.count = 0
          self.data1=[]
          self.data2=[]
          self.start = False
+         if self.pSerial.is_open:
+            self.pSerial.close()
+         self.pSerial.open()
+         self.pSerial.flushInput()
+         self.pSerial.flushOutput()
          timer1 = QTimer(self)
-         timer1.timeout.connect(self.showTime)
+         timer1.timeout.connect(self.Datos)
          timer1.start(100)
 
-      # Sensor Buttons:
-         self.b1.clicked.connect(self.start_action)#Iniciar Sensor
-         self.b25.clicked.connect(self.reset_action)#Reiniciar Sensor
-         self.b2.clicked.connect(self.pause_action)#Detener Sensor
+        #Botones Sensor
+         self.b1_4.clicked.connect(self.start_action)#Iniciar Sensor
+         self.b25_2.clicked.connect(self.reset_action)#Reiniciar Sensor
+         self.b2_2.clicked.connect(self.pause_action)#Detener Sensor
         
-      #Other buttons  
-         self.b3.clicked.connect(self.presionventana)#Presión Actual
-         self.b4.clicked.connect(self.grafventana)#Gráfica
-         self.b5.clicked.connect(self.guardarg)#Guardar Gráfica
-         self.b6.clicked.connect(self.guardard)#Guardar Datos
-         self.b1_2.clicked.connect(self.determinado)#Determinado
-         self.b1_3.clicked.connect(self.indeterminado)#Indeterminado
+        #Botones Tiempo
+         self.b1_5.clicked.connect(self.determinado)#Determinado
+         self.b1_6.clicked.connect(self.indeterminado)#Indeterminado      
+
+        #Botones Guardado
+         self.b5_2.clicked.connect(self.guardarg)#Guardar Gráfica
+         self.b6_2.clicked.connect(self.guardard)#Guardar Datos
         
+        #Botones Pres y Graf
+         self.b3_2.clicked.connect(self.presionventana)#Presión Actual
+         self.b4_2.clicked.connect(self.grafventana)#Gráfica
+        
+        #Botones Puertos
+         self.radioButton.toggled.connect(self.BotonSelec)#TTYUSB0
+         self.radioButton_2.toggled.connect(self.BotonSelec)#TTYUSB1
+         self.radioButton_3.toggled.connect(self.BotonSelec)#TTYUSB2
+         
+        #Botones Selección:
+         self.pushButton.connect(self.OpenFileDatos)#Seleccion Datos
+         self.pushButton_2.connect(self.OpenFileGraf)#Seleccion Graf
+         
          quit = QAction("Quit", self)#Close
          quit.triggered.connect(self.closeEvent)
          
@@ -64,10 +72,26 @@ class MainWindow1(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
 
     # Definitions
     
-      def showTime(self):
+      def OpeFileDatos(self):
+          fileName = QtGui.QFileDialog.getOpenFileName(self, 'OpenFile')
+          self.lineEdit.setText("fileName")
+      
+      def OpeFileGraf(self):
+          fileName = QtGui.QFileDialog.getOpenFileName(self, 'OpenFile')
+          self.lineEdit_2.setText("fileName")
+      
+      def BotonSelec(self):
+          if self.radioButton.isChecked():
+              self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
+          elif self.radioButton_2.isChecked():
+              self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
+          elif self.radioButton_2.isChecked():
+              self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
+                 
+      def Datos(self):
          global presion, tabla, y, Xm, t, ptr
          if self.start:
-            z=pSerial.read_until(b'\r')
+            z=self.Serial.read_until(b'\r')
             z=z.decode()
             s=z.split(';')
             a=s[1].split('\r')
@@ -81,7 +105,7 @@ class MainWindow1(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             try:
                presion=float(a[0])
             except Exception:
-               z=pSerial.read_until(b'\r')
+               z=self.pSerial.read_until(b'\r')
                z=z.decode()
                s=z.split(';')
                a=s[1].split('\r')
@@ -102,13 +126,13 @@ class MainWindow1(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
       def start_action(self):
          self.start = True
 
-         if pSerial.is_open:
-           pSerial.close()
+         if self.pSerial.is_open:
+           self.pSerial.close()
 
-         pSerial.open()
-         pSerial.flushInput()
-         pSerial.flushOutput()
-         pSerial.write(x.encode())
+         self.pSerial.open()
+         self.pSerial.flushInput()
+         self.pSerial.flushOutput()
+         self.pSerial.write(x.encode())
 
          if self.count == tiempo1:
            self.start = False
@@ -230,7 +254,7 @@ class MainWindow1(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         
 if __name__ == "__main__":
    app = QtWidgets.QApplication([])
-   window = MainWindow1()
+   window = MainWindow()
    window.show()
    app.exec_()
    

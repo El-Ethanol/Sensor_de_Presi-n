@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets        
 from PyQt5.QtCore import QTime, QTimer
-from Parte_Gráfica.VentanaPresiónDiseño import Ui_NewWindoe, Ui_PressureWindow
+from Parte_Gráfica.VentanaPresiónDiseño import Ui_PressureWindow
 import serial as ser
 import time
 
@@ -19,7 +19,7 @@ class WindowPresion(QtWidgets.QMainWindow, Ui_PressureWindow): #Pressure Window
         self.setupUi(self)
         timer=QTimer(self)
         timer.timeout.connect(self.showpressure)
-        timer.start(1000)
+        timer.start(0)
         
     def showpressure(self):
         pSerial.write(x.encode())

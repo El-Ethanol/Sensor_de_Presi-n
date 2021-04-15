@@ -10,7 +10,7 @@ class Ui_PressureWindow(object):
        #Ventana Base
         PressureWindow.setObjectName("NewWindoe")
         PressureWindow.resize(410, 270)
-        PressureWindow.setStyleSheet("background-color: rgb(35, 35, 35)")
+        PressureWindow.setStyleSheet("background-color: rgb(45, 45,45); border-color: rgb(56, 56, 56);alternate-background-color: rgb(0, 0, 0);")
         self.centralwidget = QtWidgets.QWidget(PressureWindow)
         self.centralwidget.setObjectName("centralwidget")
         PressureWindow.setCentralWidget(self.centralwidget)
