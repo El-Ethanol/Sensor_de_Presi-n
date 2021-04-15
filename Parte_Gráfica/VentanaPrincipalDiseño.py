@@ -10,32 +10,35 @@ class Ui_MainWindow(object):
     #Ventana Base
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(437, 536)
-        MainWindow.setStyleSheet("background-color: rgb(45, 45,45); border-color: rgb(56, 56, 56);")
+        MainWindow.setStyleSheet("background-color: rgb(45, 45,45); border-color: rgb(56, 56, 56);alternate-background-color: rgb(0, 0, 0);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
+     #Pestañas 
         self.tabs = QtWidgets.QTabWidget(self.centralwidget)
         self.tabs.setGeometry(QtCore.QRect(0, 0, 451, 531))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tabs.sizePolicy().hasHeightForWidth())
-        
-     #Pestañas 
         self.tabs.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(8)
         self.tabs.setFont(font)
         self.tabs.setAutoFillBackground(False)
-        self.tabs.setStyleSheet("background-color: rgb(45, 45, 45)")
+        self.tabs.setStyleSheet("background-color: rgb(45, 45, 45);color: rgb(255, 255, 255); selection-color: rgb(255, 255, 255); border-color: rgb(45, 45, 45);")
         self.tabs.setTabPosition(QtWidgets.QTabWidget.North)
-        self.tabs.setTabShape(QtWidgets.QTabWidget.Rounded)
+        self.tabs.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.tabs.setIconSize(QtCore.QSize(25, 25))
         self.tabs.setElideMode(QtCore.Qt.ElideLeft)
         self.tabs.setObjectName("Tabs")
-        self.tab = QtWidgets.QWidget()
-        self.tab.setObjectName("tab")
         
     #Pestaña Inicio
+    
+     #Nombre Pestaña
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.tab.setStyleSheet('QTabWidger::tab {background-color: red;}')
   
      #Organización Botones Sensor
         self.layoutWidget_2 = QtWidgets.QWidget(self.tab)
@@ -230,6 +233,8 @@ class Ui_MainWindow(object):
         self.label_4.setFont(font)
         self.label_4.setStyleSheet("background-color: rgb(64, 64, 64); color: rgb(255, 255, 255);")
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
+        urlLink=" <a href=\"https://github.com/El-Ethanol/Sensor_de_Presion.git\"> <font color=white> GitHub </font> </a>" 
+        self.label_4.setText(urlLink)
         self.label_4.setOpenExternalLinks(True)
         self.label_4.setObjectName("label_4")
     
@@ -279,8 +284,7 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Seleccionar."))
         self.pushButton_2.setText(_translate("MainWindow", "Seleccionar."))
         self.tabs.setTabText(self.tabs.indexOf(self.tab_3), _translate("MainWindow", "Ayuda"))
-        self.label_2.setText(_translate("MainWindow", "Para más información ir a:"))
-        self.label_4.setText(_translate("MainWindow", "https://github.com/El-Ethanol/Sensor_de_Presion.git"))
+        self.label_2.setText(_translate("MainWindow", "    Para más información:"))
         self.label_7.setText(_translate("MainWindow", "Ethan Campos Méndez, México 2021"))
         self.tabs.setTabText(self.tabs.indexOf(self.tab_2), _translate("MainWindow", "Configuración"))
 
