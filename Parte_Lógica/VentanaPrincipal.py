@@ -1,5 +1,6 @@
 # pylint: disable-msg=E0611
 # pylint: disable wildcard-import
+
 import time
 import pyqtgraph as pg
 import pyqtgraph.exporters
