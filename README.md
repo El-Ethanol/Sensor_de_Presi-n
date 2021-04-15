@@ -5,9 +5,10 @@ Programa (escrito en Python) para controlar y obtener datos del sensor de presi√
 
 Este est√° optimizado para el sensor ubicado en el ICN-UNAM. 
 
-## Requierimientos: 
+## Requerimientos: 
 
 -PyQt5
+
 -Python 3.9.2
 
 ## Contacto:
