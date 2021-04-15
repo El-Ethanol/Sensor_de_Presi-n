@@ -13,39 +13,46 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMessageBox, QAction
 from pyqtgraph.Qt import QtGui
 
-x='@249DL?;FF'
-y=[]
-Xm = []    
-ptr = 0
-t=[]
-
+#Ventana Principal
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
      
       def __init__(self, parent=None):
          super(MainWindow, self).__init__(parent)
+         
+        #Diseño
          self.setupUi(self)
          self.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(35, 35, 35);") 
+         
+        #Variables
          self.count = 0
-         self.data1=[]
-         self.data2=[]
+         self.commando='@249DL?;FF'
+         self.TP=[]
+         self.t=[]
+         self.DatosGraf=[]
+         self.paso=0
          self.start = False
+         
+        #Cerrar puerto y borrar caché
          if self.pSerial.is_open:
             self.pSerial.close()
          self.pSerial.open()
          self.pSerial.flushInput()
          self.pSerial.flushOutput()
+         
+        #Temporizador
          timer1 = QTimer(self)
          timer1.timeout.connect(self.Datos)
          timer1.start(100)
-
+      
+      #Botones
         #Botones Sensor
          self.b1_4.clicked.connect(self.start_action)#Iniciar Sensor
          self.b25_2.clicked.connect(self.reset_action)#Reiniciar Sensor
          self.b2_2.clicked.connect(self.pause_action)#Detener Sensor
         
         #Botones Tiempo
-         self.b1_5.clicked.connect(self.determinado)#Determinado
-         self.b1_6.clicked.connect(self.indeterminado)#Indeterminado      
+         self.b1_5.clicked.connect(self.T_Determinado)#Determinado
+         self.b1_6.clicked.connect(self.T_Indeterminado)#Indeterminado      
 
         #Botones Guardado
          self.b5_2.clicked.connect(self.guardarg)#Guardar Gráfica
@@ -60,18 +67,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.radioButton_2.toggled.connect(self.BotonSelec)#TTYUSB1
          self.radioButton_3.toggled.connect(self.BotonSelec)#TTYUSB2
          
-        #Botones Selección:
+        #Botones Selección
          self.pushButton.connect(self.OpenFileDatos)#Seleccion Datos
          self.pushButton_2.connect(self.OpenFileGraf)#Seleccion Graf
          
+        #Botones Cerrar
          quit = QAction("Quit", self)#Close
          quit.triggered.connect(self.closeEvent)
-         
 
          self.show()
 
-    # Definitions
+ #Funciones ligadas a los botones
     
+     #Funciones para elegir ruta
       def OpeFileDatos(self):
           fileName = QtGui.QFileDialog.getOpenFileName(self, 'OpenFile')
           self.lineEdit.setText("fileName")
@@ -80,6 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
           fileName = QtGui.QFileDialog.getOpenFileName(self, 'OpenFile')
           self.lineEdit_2.setText("fileName")
       
+     #Funcion para elegir puerto 
       def BotonSelec(self):
           if self.radioButton.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
@@ -87,15 +96,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
               self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
           elif self.radioButton_2.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
-                 
+     
+     #Funcion obtención de datos             
       def Datos(self):
-         global presion, tabla, y, Xm, t, ptr
+         global tabla
          if self.start:
-            z=self.Serial.read_until(b'\r')
+            z=self.pSerial.read_until(b'\r')
             z=z.decode()
             s=z.split(';')
             a=s[1].split('\r')
-            presion=float(a[0]) 
+            self.presion=float(a[0]) 
             if len(s)==1:
                pass
             else:
@@ -103,37 +113,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
                now=time.strftime("%X")
                time.sleep(1)
             try:
-               presion=float(a[0])
+               self.presion=float(a[0])
             except Exception:
                z=self.pSerial.read_until(b'\r')
                z=z.decode()
                s=z.split(';')
                a=s[1].split('\r')
-               presion=float(a[0])
+               self.presion=float(a[0])
             self.count = self.count+1
-            y.append((now,presion))
-            tabla=pd.DataFrame(y,columns=['Hora','Presión']) 
-            print(tabla)
-            t.append(ptr)
-            Xm.append(presion)
-            ptr=ptr+1
+            self.TP.append((now,self.presion))
+            tabla=pd.DataFrame(self.TP,columns=['Hora','Presión']) 
+            self.t.append(self.paso)
+            self.DatosGraf.append(self.presion)
+            self.paso=self.paso+1
             if self.count == tiempo1:
                self.start = False
             else:
                pass
                
-                
+     #Botones Iniciar, Pausar, Reiniciar          
+      
       def start_action(self):
          self.start = True
-
          if self.pSerial.is_open:
            self.pSerial.close()
-
          self.pSerial.open()
          self.pSerial.flushInput()
          self.pSerial.flushOutput()
-         self.pSerial.write(x.encode())
-
+         self.pSerial.write(self.commando.encode())
          if self.count == tiempo1:
            self.start = False
   
@@ -143,71 +150,85 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
       def reset_action(self):
          self.start = False
          self.count = 0
-          
+         
+     #Funcion ventana presion
+      
       def presionventana(self):
          self.window = QtWidgets.QMainWindow()
          self.ui1 = WindowPresion()
          self.ui1.setupUi(self.window)
          self.window.show()
      
+     #Funciones ventana grafica
       def grafventana(self):
+          
+       #Diseño ventana
          self.win=pg.GraphicsWindow()
          self.win.setWindowTitle("Gráfica")
          self.layout = QtGui.QGridLayout()
          self.layout.setParent(self.win)
          self.win.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(35, 35, 35);") 
-
+        
+       #Grafica datos
          self.curve=pg.PlotWidget()
          self.win.setLayout(self.layout)
 
-         self.saveBtn = QtGui.QPushButton("Gráfica Actual")
-         self.saveBtn.setParent(self.win)
-         self.saveBtn.show()
+       #Botones 
+         self.startBtn = QtGui.QPushButton("Gráfica Actual") #Botón iniciar gráfica.
+         self.startBtn.setParent(self.win)
+         self.startBtn.show()
 
-         self.stopBtn = QtGui.QPushButton("Detener")
+         self.stopBtn = QtGui.QPushButton("Detener") #Botón detener gráfica.
          self.stopBtn.setParent(self.win)
          self.stopBtn.show()
 
-         self.layout.addWidget(self.saveBtn, 1, 0)
+        #Organización botones     
+         self.layout.addWidget(self.startBtn, 1, 0)
          self.layout.addWidget(self.stopBtn, 2, 0)
          self.layout.addWidget(self.curve, 0, 3, 2, 3 )
 
-         self.saveBtn.clicked.connect(self.iniciog)
-         self.stopBtn.clicked.connect(self.pausarg)
-
-         self.curve.plot(t,Xm,pen=pg.mkPen('r', width=2))
+        #Conexión botones
+         self.startBtn.clicked.connect(self.Inicio_G)
+         self.stopBtn.clicked.connect(self.Pausar_G)
+        
+       #Gráfica y diseño
+         self.curve.plot(self.t,self.DatosGraf,pen=pg.mkPen('r', width=2))
          self.curve.setLabel(axis='left', text='Presión (Torr)')
          self.curve.setLabel(axis='bottom', text='Tiempo (s)')                
          pg.mkColor('r')
-         if len(y)>11:
-            self.curve.setXRange(len(y)-11,len(y)-1,padding=0)
-         else: pass                    
+         
+        #Rango del eje x
+         if len(self.TP)>11:
+            self.curve.setXRange(len(self.TP)-11,len(self.TP)-1,padding=0)
+         else: 
+             pass                    
          self.curve.setPos(0,0)
 
+       #Contador para auto-actualizar
          self.startg = False
          timerg = QTimer(self)
-         timerg.timeout.connect(self.updater)
+         timerg.timeout.connect(self.Actualizador)
          timerg.start(100)
 
          self.win.show()
 
-      def iniciog(self):
+     #Funciones de los botones de las gráfica
+      def Inicio_G(self):
          self.startg=True
 
-      def pausarg(self):
+      def Pausar_G(self):
          self.startg=False
       
-      def updater(self):
+      def Actualizador(self):
          if self.startg:
-            self.curve.plot(t,Xm,pen=pg.mkPen('r', width=2))
-            if len(y)>11:
-              self.curve.setXRange(len(y)-11,len(y)-1,padding=0)
-            else: pass                   
-
-      def grafventana1(self):
-         self.dialog.show()
-          
-      def determinado(self):
+            self.curve.plot(self.t,self.DatosGraf,pen=pg.mkPen('r', width=2))
+            if len(self.TP)>11:
+              self.curve.setXRange(len(self.TP)-11,len(self.TP)-1,padding=0)
+            else: 
+                pass                  
+        
+     #Funciones para determinar el tiempo
+      def T_Determinado(self):
          global tiempo1,tiempo2
          text= QtWidgets.QInputDialog.getText(self, 'Tiempo...', '¿Cuántos segundos?:')   
          if text[1]:
@@ -215,26 +236,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          tiempo1=float(tiempo)
          tiempo2=False
          
-      def indeterminado(self):
+      def T_Indeterminado(self):
          global tiempo1, tiempo2
          tiempo2=True
          tiempo1=-1
-
           
+     #Cerrar ventana
       def closeEvent(self,event):
-          close = QMessageBox()
-          close.setWindowTitle("Salir...")
-          close.setText("¿Deseas salir?")
-          close.setIcon(QMessageBox.Question)
-          close.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-          close.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
-          close = close.exec()
+         #Diseño ventana 
+          self.close = QMessageBox()
+          self.close.setWindowTitle("Salir...")
+          self.close.setText("¿Deseas salir?")
+          self.close.setIcon(QMessageBox.Question)
+          self.close.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+          self.close.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
+          self.close = self.close.exec()
 
-          if close == QMessageBox.Yes:
+         #Acciones
+          if self.close == QMessageBox.Yes:
              event.accept()
           else:
              event.ignore()
              
+     #Guardado datos y graf
       def guardard(self):
          text= QtWidgets.QInputDialog.getText(self, 'Guardar Como:', 'Guardar Como:')   
          if text[1]:
@@ -251,7 +275,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             exporter = pg.exporters.ImageExporter(self.curve.plotItem)
             exporter.export(path)
            
-        
 if __name__ == "__main__":
    app = QtWidgets.QApplication([])
    window = MainWindow()
