@@ -7,9 +7,9 @@ Este está optimizado para el sensor ubicado en el ICN-UNAM.
 
 ## Requerimientos: 
 
--PyQt5
+- PyQt5
 
--Python 3.9.2
+- Python 3.x 
 
 ## Contacto:
 
