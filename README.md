@@ -1,5 +1,5 @@
 # Sensor de Presión.
-### Ethan Campos Méndez FC-UNAM 2021.
+#### Ethan Campos Méndez FC-UNAM 2021.
 
 Programa (escrito en Python) para controlar y obtener datos del sensor de presión MKS PDR-900. 
 
