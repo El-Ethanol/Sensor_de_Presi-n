@@ -83,11 +83,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
      #Funcion para elegir puerto 
       def BotonSelec(self):
           if self.radioButton.isChecked():
-              self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
-          elif self.radioButton_1.isChecked():
-              self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
-          elif self.radioButton_2.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
+          elif self.radioButton_2.isChecked():
+              self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
+          elif self.radioButton_3.isChecked():
+              self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
      
      #Funcion obtención de datos             
       def Datos(self):
