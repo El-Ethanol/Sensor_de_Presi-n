@@ -1,8 +1,7 @@
 #Parte Lógica de la Ventana Principal
 
-import time, os
+import time, os, pyqtgraph.exporters
 import pyqtgraph as pg
-import pyqtgraph.exporters
 import pandas as pd 
 import serial as ser
 from VentanaPrincipalDiseño import Ui_MainWindow

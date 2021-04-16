@@ -11,6 +11,10 @@ Este está optimizado para el sensor ubicado en el ICN-UNAM.
 
 - Python 3.x 
 
+- Pandas
+
+- pyqtgraph
+
 ## Contacto:
 
 <ethancampos@ciencias.unam.mx>
