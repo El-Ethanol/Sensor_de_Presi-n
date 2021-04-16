@@ -30,6 +30,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.DatosGraf=[]
          self.paso=0
          self.start = False
+         self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
          
         #Temporizador
          timer1 = QTimer(self)
@@ -55,9 +56,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.b4_2.clicked.connect(self.grafventana)#Gráfica
         
         #Botones Puertos
-         self.radioButton.toggled.connect(self.BotonSelec)#TTYUSB0
+         self.radioButton.setChecked(True)
+         self.radioButton.toggled.connect(self.BotonSelec)#TTYUSB2
          self.radioButton_2.toggled.connect(self.BotonSelec)#TTYUSB1
-         self.radioButton_3.toggled.connect(self.BotonSelec)#TTYUSB2
+         self.radioButton_3.toggled.connect(self.BotonSelec)#TTYUSB0
          
         #Botones Selección
          self.pushButton.clicked.connect(self.OpenFileDatos)#Seleccion Datos
@@ -91,7 +93,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
      
      #Funcion obtención de datos             
       def Datos(self):
-         global tabla
+         global tabla, a
          if self.start:
             z=self.pSerial.read_until(b'\r')
             z=z.decode()
@@ -195,10 +197,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
        #Actualizador de Presión    
         
       def showpressure(self): 
-
         HoraActual=QTime.currentTime()
         Tiempo=HoraActual.toString('hh:mm:ss')
-        Press=str(self.presion)
+        Press=a[0]
         self.labelp_2.setText("Hora:  " + Tiempo)
         self.labelp_3.setText("Presión:  " + Press + " Torr")
         
