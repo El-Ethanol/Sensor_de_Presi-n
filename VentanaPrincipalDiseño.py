@@ -240,7 +240,7 @@ class Ui_MainWindow(object):
     
      #Nombre y año
         self.label_7 = QtWidgets.QLabel(self.tab_3)
-        self.label_7.setGeometry(QtCore.QRect(110, 460, 221, 20))
+        self.label_7.setGeometry(QtCore.QRect(110, 460, 260, 20))
         self.label_7.setStyleSheet("color: rgb(255, 255, 255);")
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
         self.label_7.setObjectName("label_7")
