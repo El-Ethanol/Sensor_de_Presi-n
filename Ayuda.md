@@ -33,7 +33,9 @@ Tal como sus nombres indican sirven para Iniciar, Pausar y Reiniciar el sensor.
 
 
 
-3. __Gráfica__ y __Presión Actual__. ![Actuales](https://github.com/El-Ethanol/Servicio-Social/blob/master/Actuales.png) 
+3. __Gráfica__ y __Presión Actual__. 
+
+![Actuales](https://github.com/El-Ethanol/Servicio-Social/blob/master/Actuales.png) 
 
   - Con el botón de __Gráfica__, se abrirá una ventana con 2 botones y un gráfica de los últimos 10 segundos de funcionamiento del sensor. 
   
@@ -43,12 +45,12 @@ Tal como sus nombres indican sirven para Iniciar, Pausar y Reiniciar el sensor.
 
   - Con el botón de __Presión Actual__, se abriá una ventana que nos indicará la hora de la medición y la presión actual. 
   
-  [Presión](https://github.com/El-Ethanol/Servicio-Social/blob/master/Presi%C3%B3n.png)
-
+    ![Presión](https://github.com/El-Ethanol/Servicio-Social/blob/master/Presi%C3%B3n.png)
+  
 
 4. _Guardar Datos_ y _Guardar Gráfica_ con estos botones, se elegirá el nombre con el cuál se guardará un archivo .cvs para los datos y una imagen .png para la gráfica. El directorio donde se guardarán estos archivos puede ser elegido el la pestaña de _Configuración_. 
 
-[Guardado](https://github.com/El-Ethanol/Servicio-Social/blob/master/Guardado.png)
+    ![Guardado](https://github.com/El-Ethanol/Servicio-Social/blob/master/Guardado.png)
 
 
 
