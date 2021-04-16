@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
       def BotonSelec(self):
           if self.radioButton.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
-          elif self.radioButton_2.isChecked():
+          elif self.radioButton_1.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
           elif self.radioButton_2.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
@@ -123,7 +123,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             else:
                pass
                
-     #Botones Iniciar, Pausar, Reiniciar          
+      #Botones Iniciar, Pausar, Reiniciar          
       
       def start_action(self):
          self.start = True
@@ -301,7 +301,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
           else:
              event.ignore()
              
-     #Guardado datos y graf
+     #Guardado Datos y Graf
       def guardard(self):
          text= QtWidgets.QInputDialog.getText(self, 'Guardar Como:', 'Guardar Como:')   
          if text[1]:
