@@ -73,12 +73,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
     
      #Funciones para elegir ruta
       def OpenFileDatos(self):
-          fileName = QtGui.QFileDialog.getOpenFileName(self, 'OpenFile')
-          self.lineEdit.setText(str(fileName))
+          fileName = QtGui.QFileDialog.getExistingDirectory(self, 'OpenFile')
+          self.lineEdit.setText(fileName)
       
       def OpenFileGraf(self):
-          fileName = QtGui.QFileDialog.getOpenFileName(self, 'OpenFile')
-          self.lineEdit_2.setText(str(fileName))
+          fileName = QtGui.QFileDialog.getExistingDirectory(self, 'OpenFile')
+          self.lineEdit_2.setText(fileName)
       
      #Funcion para elegir puerto 
       def BotonSelec(self):
