@@ -15,6 +15,10 @@ Este está optimizado para el sensor ubicado en el ICN-UNAM.
 
 - pyqtgraph
 
+## Ayuda:
+
+Ver archivo [_Ayuda.md_](https://github.com/El-Ethanol/Sensor_de_Presion/blob/master/Ayuda.md) en este repositorio. 
+
 ## Contacto:
 
 <ethancampos@ciencias.unam.mx>
