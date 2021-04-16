@@ -62,10 +62,9 @@ Tal como sus nombres indican sirven para Iniciar, Pausar y Reiniciar el sensor.
   </p>
 
 4. _Guardar Datos_ y _Guardar Gráfica_ con estos botones, se elegirá el nombre con el cuál se guardará un archivo .cvs para los datos y una imagen .png para la gráfica. El directorio donde se guardarán estos archivos puede ser elegido el la pestaña de _Configuración_. 
-
-   <p align="center">
+ <p align="center">
   <img src="https://github.com/El-Ethanol/Servicio-Social/blob/master/Guardado.png" />
-</p>
+   </p>
 
 
 
