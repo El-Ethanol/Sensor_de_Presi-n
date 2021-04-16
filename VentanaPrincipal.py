@@ -1,11 +1,10 @@
 #Parte Lógica de la Ventana Principal
 
-import time
+import time, os
 import pyqtgraph as pg
 import pyqtgraph.exporters
 import pandas as pd 
 import serial as ser
-import os
 from VentanaPrincipalDiseño import Ui_MainWindow
 from PyQt5 import QtWidgets, QtCore, QtGui   
 from PyQt5.QtCore import QTimer, QTime
