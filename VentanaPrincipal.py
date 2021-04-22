@@ -171,6 +171,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             self.error.setWindowTitle("Error")
             self.error.setText("¡Tiempo no definido!")
             self.error.setIcon(QMessageBox.Critical)
+            self.errorp.setDetailedText("Definir tiempo con los botones Determinado o Indeterminado.")
             self.error.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
             self.error.exec()
 
