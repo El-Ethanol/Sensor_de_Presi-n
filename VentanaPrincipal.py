@@ -23,12 +23,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         #Variables
          self.count = 0
          self.commando='@249DL?;FF'
+         self.x='@249DLC!START;FF'
          self.TP=[]
          self.t=[]
          self.DatosGraf=[]
          self.paso=0
          self.start = False
-         self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
+         self.BotonSlec()
          
         #Temporizador
          timer1 = QTimer(self)
@@ -54,7 +55,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.b4_2.clicked.connect(self.grafventana)#Gráfica
         
         #Botones Puertos
-         self.radioButton.setChecked(True)
          self.radioButton.toggled.connect(self.BotonSelec)#TTYUSB2
          self.radioButton_2.toggled.connect(self.BotonSelec)#TTYUSB1
          self.radioButton_3.toggled.connect(self.BotonSelec)#TTYUSB0
@@ -80,7 +80,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
           fileName = QtGui.QFileDialog.getExistingDirectory(self, 'OpenFile')
           self.lineEdit_2.setText(fileName)
       
-     #Funcion para elegir puerto 
+     #Función para elegir puerto 
       def BotonSelec(self):
           if self.radioButton.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB2',baudrate=9600,timeout=1)
@@ -88,29 +88,52 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
               self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
           elif self.radioButton_3.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
+              
+      #Función error puerto
+      def Puerto_error(self):
+         self.start = False
+         self.errorp = QMessageBox()
+         self.errorp.setWindowTitle("Error")
+         self.errorp.setText("¡Puerto Incorrecto!")
+         self.errorp.setDetailedText("Cambiar en la pestaña de configuración.")
+         self.errorp.setIcon(QMessageBox.Critical)
+         self.errorp.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
+         self.errorp.exec()
      
-     #Funcion obtención de datos             
+     #Obtención de datos.
+
+      #Función interactuante con el sensor.      
+      def regreso(self):
+         z=self.pSerial.read_until(b'\r')
+         z=z.decode()
+         s=z.split(';')
+         if len(s)==1: pass
+         else:
+            a=s[1].split('\r')
+            now=time.strftime("%X")
+            return a,now
+
+      #Tabla y presión
       def Datos(self):
          global tabla, a
          if self.start:
-            z=self.pSerial.read_until(b'\r')
-            z=z.decode()
-            s=z.split(';')
-            a=s[1].split('\r')
-            self.presion=float(a[0]) 
-            if len(s)==1:
-               pass
-            else:
-               a=s[1].split('\r')
-               now=time.strftime("%X")
-               time.sleep(1)
+            self.pSerial.write(self.x.encode())
+            c=self.regreso()
+            a=c[0]
+            now=c[1]
+            time.sleep(1)
             try:
                self.presion=float(a[0])
             except Exception:
-               z=self.pSerial.read_until(b'\r')
-               z=z.decode()
-               s=z.split(';')
-               a=s[1].split('\r')
+               c=self.regreso()
+               a=c[0]
+               now=c[1]
+               if a=='FF':
+                  z=self.pSerial.read_until(b'\r')
+                  z=z.decode()
+                  s=z.split(';')
+                  a=s[1].split('\r')
+               else: pass
                self.presion=float(a[0])
             self.count = self.count+1
             self.TP.append((now,self.presion))
@@ -133,8 +156,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.pSerial.flushInput()
          self.pSerial.flushOutput()
          self.pSerial.write(self.commando.encode())
-         if self.count == tiempo1:
-           self.start = False
+         try:
+            if self.count == tiempo1:
+               self.start = False
+         except Exception:
+            self.start = False
+            self.error = QMessageBox()
+            self.error.setWindowTitle("Error")
+            self.error.setText("¡Tiempo no definido!")
+            self.error.setIcon(QMessageBox.Critical)
+            self.error.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
+            self.error.exec()
   
       def pause_action(self):
          self.start = False
@@ -277,6 +309,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             tiempo = text[0]
          tiempo1=float(tiempo)
          tiempo2=False
+         try: 
+            x=5
+         except Exception:
+               self.Puerto_error()
          
       def T_Indeterminado(self):
          global tiempo1, tiempo2
