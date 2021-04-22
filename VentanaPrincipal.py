@@ -88,7 +88,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
               self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
           elif self.radioButton_3.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
-          self.pause = False
 
      #Función error puerto
       def Puerto_error(self):
