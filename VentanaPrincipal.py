@@ -23,13 +23,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         #Variables
          self.count = 0
          self.commando='@249DL?;FF'
-         self.x='@249DLC!START;FF'
          self.TP=[]
          self.t=[]
          self.DatosGraf=[]
          self.paso=0
          self.start = False
-         self.BotonSlec()
+         self.BotonSelec()
+         self.StartStop()
          
         #Temporizador
          timer1 = QTimer(self)
@@ -88,21 +88,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
               self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
           elif self.radioButton_3.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
-              
-      #Función error puerto
+          self.pause = False
+
+     #Función error puerto
       def Puerto_error(self):
          self.start = False
          self.errorp = QMessageBox()
          self.errorp.setWindowTitle("Error")
          self.errorp.setText("¡Puerto Incorrecto!")
-         self.errorp.setDetailedText("Cambiar en la pestaña de configuración.")
+         self.errorp.setDetailedText("Cambiar el puerto en la pestaña de configuración.")
          self.errorp.setIcon(QMessageBox.Critical)
          self.errorp.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
          self.errorp.exec()
-     
+
      #Obtención de datos.
 
-      #Función interactuante con el sensor.      
+      #Función interactuante con el sensor.
       def regreso(self):
          z=self.pSerial.read_until(b'\r')
          z=z.decode()
@@ -113,28 +114,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             now=time.strftime("%X")
             return a,now
 
+      def StartStop(self):
+         x='@249DLC!STOP;FF'
+         self.pSerial.write(x.encode())
+         x='@249DLC!START;FF'
+         self.pSerial.write(x.encode())
+
       #Tabla y presión
       def Datos(self):
          global tabla, a
          if self.start:
-            self.pSerial.write(self.x.encode())
+            self.StartStop()
+            self.pSerial.write(self.commando.encode())
             c=self.regreso()
+            if c==None:
+               self.Puerto_error()
+               return False
+            else: pass   
             a=c[0]
-            now=c[1]
-            time.sleep(1)
-            try:
-               self.presion=float(a[0])
-            except Exception:
+            if a[0]=='MP: Torr':
+               self.pSerial.write(self.commando.encode())
                c=self.regreso()
                a=c[0]
-               now=c[1]
-               if a=='FF':
-                  z=self.pSerial.read_until(b'\r')
-                  z=z.decode()
-                  s=z.split(';')
-                  a=s[1].split('\r')
-               else: pass
-               self.presion=float(a[0])
+            else: 
+               pass
+            now=c[1]
+            time.sleep(1)
+            self.presion=float(a[0])
             self.count = self.count+1
             self.TP.append((now,self.presion))
             tabla=pd.DataFrame(self.TP,columns=['Hora','Presión']) 
@@ -167,6 +173,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             self.error.setIcon(QMessageBox.Critical)
             self.error.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
             self.error.exec()
+
   
       def pause_action(self):
          self.start = False
@@ -310,14 +317,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          tiempo1=float(tiempo)
          tiempo2=False
          try: 
-            x=5
+            cmd='@254ADC?;FF'
+            self.pSerial.write(cmd.encode())
          except Exception:
-               self.Puerto_error()
+            self.Puerto_error()
          
       def T_Indeterminado(self):
          global tiempo1, tiempo2
          tiempo2=True
          tiempo1=-1
+         try: 
+            cmd='@254ADC?;FF'
+            self.pSerial.write(cmd.encode())
+         except Exception:
+            self.Puerto_error()
           
      #Cerrar ventana
       def closeEvent(self,event):
