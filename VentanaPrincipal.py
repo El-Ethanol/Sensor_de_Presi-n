@@ -28,13 +28,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.DatosGraf=[]
          self.paso=0
          self.start = False
+
+        #Funciones extra.
          self.BotonSelec()
-         self.StartStop()
          
         #Temporizador
          timer1 = QTimer(self)
          timer1.timeout.connect(self.Datos)
-         timer1.start(100)
+         timer1.start(0)
       
       #Botones
         #Botones Sensor
@@ -104,42 +105,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
 
       #Función interactuante con el sensor.
       def regreso(self):
-         z=self.pSerial.read_until(b'\r')
-         z=z.decode()
-         s=z.split(';')
-         if len(s)==1: pass
-         else:
-            a=s[1].split('\r')
-            now=time.strftime("%X")
-            return a,now
-
-      def StartStop(self):
          x='@249DLC!STOP;FF'
          self.pSerial.write(x.encode())
          x='@249DLC!START;FF'
          self.pSerial.write(x.encode())
+         time.sleep(2.5)
+         self.pSerial.write(self.commando.encode())
+         z=self.pSerial.readline().decode()
+         s=z.split(';')
+         try:
+            s=s[3].split('\r')
+            print(s)
+         except Exception:
+            self.Puerto_error()
+            return 1
+         a=s[0]
+         now=time.strftime("%X")
+         return a,now
 
       #Tabla y presión
       def Datos(self):
          global tabla, a
          if self.start:
-            self.StartStop()
-            self.pSerial.write(self.commando.encode())
             c=self.regreso()
-            if c==None:
-               self.Puerto_error()
-               return False
-            else: pass   
             a=c[0]
-            if a[0]=='MP: Torr':
-               self.pSerial.write(self.commando.encode())
-               c=self.regreso()
-               a=c[0]
-            else: 
-               pass
             now=c[1]
-            time.sleep(1)
-            self.presion=float(a[0])
+            self.presion=float(a)
             self.count = self.count+1
             self.TP.append((now,self.presion))
             tabla=pd.DataFrame(self.TP,columns=['Hora','Presión']) 
@@ -154,13 +145,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
       #Botones Iniciar, Pausar, Reiniciar          
       
       def start_action(self):
-         self.start = True
          if self.pSerial.is_open:
            self.pSerial.close()
          self.pSerial.open()
-         self.pSerial.flushInput()
-         self.pSerial.flushOutput()
-         self.pSerial.write(self.commando.encode())
+         self.start = True
          try:
             if self.count == tiempo1:
                self.start = False
@@ -170,11 +158,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             self.error.setWindowTitle("Error")
             self.error.setText("¡Tiempo no definido!")
             self.error.setIcon(QMessageBox.Critical)
-            self.errorp.setDetailedText("Definir tiempo con los botones Determinado o Indeterminado.")
+            self.error.setDetailedText("Definir tiempo con los botones Determinado o Indeterminado.")
             self.error.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(64, 64, 64);")
             self.error.exec()
 
-  
       def pause_action(self):
          self.start = False
   
@@ -236,7 +223,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
       def showpressure(self): 
         HoraActual=QTime.currentTime()
         Tiempo=HoraActual.toString('hh:mm:ss')
-        Press=a[0]
+        Press=a
         self.labelp_2.setText("Hora:  " + Tiempo)
         self.labelp_3.setText("Presión:  " + Press + " Torr")
         
@@ -345,6 +332,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
 
          #Acciones
           if self.close == QMessageBox.Yes:
+             x='@249DLC!STOP;FF'
+             self.pSerial.write(x.encode())
              event.accept()
           else:
              event.ignore()
