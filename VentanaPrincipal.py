@@ -5,7 +5,7 @@ import pyqtgraph as pg
 import pandas as pd 
 import serial as ser
 from VentanaPrincipalDiseño import Ui_MainWindow
-from PyQt5 import QtWidgets, QtCore, QtGui   
+from PyQt5 import QtWidgets, QtCore, QtGui, QtTest   
 from PyQt5.QtCore import QTimer, QTime
 from PyQt5.QtWidgets import QMessageBox, QAction
 from pyqtgraph.Qt import QtGui
@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         #Temporizador
          timer1 = QTimer(self)
          timer1.timeout.connect(self.Datos)
-         timer1.start(0)
+         timer1.start(1000)
       
       #Botones
         #Botones Sensor
@@ -89,7 +89,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
               self.pSerial = ser.Serial('/dev/ttyUSB1',baudrate=9600,timeout=1)
           elif self.radioButton_3.isChecked():
               self.pSerial = ser.Serial('/dev/ttyUSB0',baudrate=9600,timeout=1)
-
+              
+     #Función guardado automático
+      def Guard(self):
+          if self.radioButton_4.isChecked():
+               self.guard = True
+          elif self.radioButton_5.isChecked():
+               self.guard = False
+            
      #Función error puerto
       def Puerto_error(self):
          self.start = False
@@ -109,7 +116,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.pSerial.write(x.encode())
          x='@249DLC!START;FF'
          self.pSerial.write(x.encode())
-         time.sleep(2.5)
+         QtTest.QTest.qWait(2500)
          self.pSerial.write(self.commando.encode())
          z=self.pSerial.readline().decode()
          s=z.split(';')
@@ -141,6 +148,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
                self.start = False
             else:
                pass
+            if self.guard:
+               tabla.to_csv(r'/home/detectores/Software/mks_control/Datos_Presion/datos1.csv',index=False)
                
       #Botones Iniciar, Pausar, Reiniciar          
       
@@ -216,7 +225,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         self.PressureWindow.show()
         timerp=QTimer(self)
         timerp.timeout.connect(self.showpressure)
-        timerp.start(0)
+        timerp.start(1000)
         
        #Actualizador de Presión    
         
@@ -276,7 +285,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.startg = False
          timerg = QTimer(self)
          timerg.timeout.connect(self.Actualizador)
-         timerg.start(100)
+         timerg.start(1000)
 
          self.win.show()
 

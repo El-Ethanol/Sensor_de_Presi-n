@@ -158,24 +158,44 @@ class Ui_MainWindow(object):
     
      #Grupo Puertos
         self.groupBox = QtWidgets.QGroupBox(self.tab_2)
-        self.groupBox.setGeometry(QtCore.QRect(20, 30, 131, 91))
+        self.groupBox.setGeometry(QtCore.QRect(20, 30, 155, 95))
         self.groupBox.setStyleSheet("background-color: rgb(64, 64, 64); color: rgb(255, 255, 255);")
         self.groupBox.setObjectName("groupBox")
         
       #Botones Puertos
         self.radioButton_3 = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton_3.setGeometry(QtCore.QRect(10, 20, 89, 20))
+        self.radioButton_3.setGeometry(QtCore.QRect(10, 20, 100, 20))
         self.radioButton_3.setObjectName("radioButton_3")
         self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton_2.setGeometry(QtCore.QRect(10, 40, 89, 20))
+        self.radioButton_2.setGeometry(QtCore.QRect(10, 40, 100, 20))
         self.radioButton_2.setObjectName("radioButton_2")
         self.radioButton = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton.setGeometry(QtCore.QRect(10, 60, 89, 20))
+        self.radioButton.setGeometry(QtCore.QRect(10, 60, 100, 20))
         self.radioButton.setCheckable(True)
         self.radioButton.setChecked(True)
         self.radioButton.setAutoRepeat(True)
         self.radioButton.setObjectName("radioButton")
         
+     #Grupo Guardado Automático
+        self.groupBox_3 = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox_3.setGeometry(QtCore.QRect(220, 30, 191, 95))
+        self.groupBox_3.setStyleSheet("background-color: rgb(64, 64, 64); color: rgb(255, 255, 255);")
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.label_8 = QtWidgets.QLabel(self.groupBox_3)
+        self.label_8.setGeometry(QtCore.QRect(10,20, 120, 15))
+        self.label_8.setObjectName("label_8")
+        
+       #Botón Guardado Automático
+        self.radioButton_4 = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_4.setGeometry(QtCore.QRect(10, 40, 89, 20))
+        self.radioButton_4.setObjectName("radioButton_4")
+        self.radioButton_5 = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_5.setGeometry(QtCore.QRect(10, 60, 150, 20))
+        self.radioButton_5.setObjectName("radioButton_5")
+        self.radioButton_5.setCheckable(True)
+        self.radioButton_5.setChecked(True)
+        self.radioButton_5.setAutoRepeat(True)
+                
      #Grupo Directorios
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab_2)
         self.groupBox_2.setGeometry(QtCore.QRect(20, 160, 391, 201))
@@ -218,9 +238,9 @@ class Ui_MainWindow(object):
         
      #Título más información
         self.label_2 = QtWidgets.QLabel(self.tab_3)
-        self.label_2.setGeometry(QtCore.QRect(60, 30, 321, 61))
+        self.label_2.setGeometry(QtCore.QRect(50, 30, 321, 61))
         font = QtGui.QFont()
-        font.setPointSize(16)
+        font.setPointSize(14)
         self.label_2.setFont(font)
         self.label_2.setStyleSheet("color: rgb(255, 255, 255);")
         self.label_2.setObjectName("label_2")
@@ -240,7 +260,7 @@ class Ui_MainWindow(object):
     
      #Nombre y año
         self.label_7 = QtWidgets.QLabel(self.tab_3)
-        self.label_7.setGeometry(QtCore.QRect(110, 460, 260, 20))
+        self.label_7.setGeometry(QtCore.QRect(95, 460, 261, 20))
         self.label_7.setStyleSheet("color: rgb(255, 255, 255);")
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
         self.label_7.setObjectName("label_7")
@@ -283,6 +303,10 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Datos:"))
         self.pushButton.setText(_translate("MainWindow", "Seleccionar."))
         self.pushButton_2.setText(_translate("MainWindow", "Seleccionar."))
+        self.groupBox_3.setTitle(_translate("MainWindow","Guardado Automático:"))
+        self.radioButton_4.setText(_translate("MainWindow", "Activado"))
+        self.radioButton_5.setText(_translate("MainWindow", "Desactivado"))
+        self.label_8.setText(_translate("MainWindow", "(Archivos .csv)"))
         self.tabs.setTabText(self.tabs.indexOf(self.tab_3), _translate("MainWindow", "Ayuda"))
         self.label_2.setText(_translate("MainWindow", "    Para más información:"))
         self.label_7.setText(_translate("MainWindow", "Ethan Campos Méndez, México 2021"))
