@@ -11,7 +11,6 @@ FIRST, SECOND = range(2)
 # Callback data
 ONE, TWO, THREE, FOUR = range(4)
 
-
 def start(update,context):
     logger.info('He recibido un comando start')
     name = update.effective_chat.first_name
@@ -69,6 +68,13 @@ def presion(update,context):
     keyboard = [[InlineKeyboardButton("Refrescar", callback_data=str(ONE))]]
     context.bot.send_message(chat_id, text, reply_markup=InlineKeyboardMarkup(keyboard))
     
+def faq(update,context):
+    logger.info('He recibido un comando faq')
+    name = update.effective_chat.first_name
+    text = "Lo siento, " + name + ".\nEse no es un comando válido. 😓😓" 
+    chat_id = update.effective_chat.id
+    keyboard(chat_id, text, context)
+
 def unknown(update,context):
     logger.info('He recibido un comando inválido')
     name = update.effective_chat.first_name
@@ -86,7 +92,8 @@ if __name__ == '__main__':
     dispatcher.add_handler(CommandHandler('mediciones', mediciones))
     dispatcher.add_handler(CommandHandler('temperatura', temperatura))
     dispatcher.add_handler(CommandHandler('presion', presion))
-    
+    dispatcher.add_handler(CommandHandler('faq', faq))
+      
     unknown_handler = MessageHandler(Filters.command, unknown)
     dispatcher.add_handler(unknown_handler)
     
