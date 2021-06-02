@@ -28,9 +28,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.DatosGraf=[]
          self.paso=0
          self.start = False
+         self.nombre = "prueba1.csv"
 
         #Funciones extra.
          self.BotonSelec()
+         self.Guard()
          
         #Temporizador
          timer1 = QTimer(self)
@@ -143,13 +145,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
             tabla=pd.DataFrame(self.TP,columns=['Hora','Presión']) 
             self.t.append(self.paso)
             self.DatosGraf.append(self.presion)
-            self.paso=self.paso+1
+            self.paso=self.paso+5
             if self.count == tiempo1:
                self.start = False
             else:
                pass
             if self.guard:
                tabla.to_csv(r'/home/detectores/Software/mks_control/Datos_Presion/datos1.csv',index=False)
+               path="/home/detectores/Software/mks_control/Datos_Presion/"+ self.nombre
+               os.rename("/home/detectores/Software/mks_control/Datos_Presion/datos1.csv",path)
                
       #Botones Iniciar, Pausar, Reiniciar          
       
@@ -200,7 +204,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         self.labelp.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(56, 56, 56);")
         self.labelp.setScaledContents(False)
         self.labelp.setAlignment(QtCore.Qt.AlignCenter)
-        self.labelp.setText("Presión Actual")
+        self.labelp.setText("Presión cada 5s (aprox.)")
         
        #Título Hora
         self.labelp_2 = QtWidgets.QLabel(self.PressureWindow)
@@ -235,6 +239,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
         Press=a
         self.labelp_2.setText("Hora:  " + Tiempo)
         self.labelp_3.setText("Presión:  " + Press + " Torr")
+        QtTest.QTest.qWait(2000)
         
      #Funciones ventana grafica
       def grafventana(self):
@@ -272,13 +277,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.curve.plot(self.t,self.DatosGraf,pen=pg.mkPen('r', width=2))
          self.curve.setLabel(axis='left', text='Presión (Torr)')
          self.curve.setLabel(axis='bottom', text='Tiempo (s)')                
-         pg.mkColor('r')
-         
-        #Rango del eje x
-         if len(self.TP)>11:
-            self.curve.setXRange(len(self.TP)-11,len(self.TP)-1,padding=0)
-         else: 
-             pass                    
+         pg.mkColor('r')             
          self.curve.setPos(0,0)
 
        #Contador para auto-actualizar
@@ -297,13 +296,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          self.startg=False
       
       def Actualizador(self):
+         QtTest.QTest.qWait(2500)
          if self.startg:
             self.curve.plot(self.t,self.DatosGraf,pen=pg.mkPen('r', width=2))
-            if len(self.TP)>11:
-              self.curve.setXRange(len(self.TP)-11,len(self.TP)-1,padding=0)
-            else: 
-                pass                  
-        
+   
      #Funciones para determinar el tiempo
       def T_Determinado(self):
          global tiempo1,tiempo2
@@ -351,9 +347,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
       def guardard(self):
          text= QtWidgets.QInputDialog.getText(self, 'Guardar Como:', 'Guardar Como:')   
          if text[1]:
-            nombre = text[0] + ".csv"
+            self.nombre = text[0] + ".csv"
             tabla.to_csv(r'/home/detectores/Software/mks_control/Datos_Presion/datos1.csv',index=False)
-            path="/home/detectores/Software/mks_control/Datos_Presion/"+ nombre
+            path="/home/detectores/Software/mks_control/Datos_Presion/"+ self.nombre
             os.rename("/home/detectores/Software/mks_control/Datos_Presion/datos1.csv",path)
              
       def guardarg(self):
