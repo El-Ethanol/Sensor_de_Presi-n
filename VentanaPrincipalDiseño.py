@@ -171,9 +171,9 @@ class Ui_MainWindow(object):
         self.radioButton_2.setObjectName("radioButton_2")
         self.radioButton = QtWidgets.QRadioButton(self.groupBox)
         self.radioButton.setGeometry(QtCore.QRect(10, 60, 100, 20))
-        self.radioButton.setCheckable(True)
-        self.radioButton.setChecked(True)
-        self.radioButton.setAutoRepeat(True)
+        self.radioButton_2.setCheckable(True)
+        self.radioButton_2.setChecked(True)
+        self.radioButton_2.setAutoRepeat(True)
         self.radioButton.setObjectName("radioButton")
         
      #Grupo Guardado Automático
@@ -192,9 +192,9 @@ class Ui_MainWindow(object):
         self.radioButton_5 = QtWidgets.QRadioButton(self.groupBox_3)
         self.radioButton_5.setGeometry(QtCore.QRect(10, 60, 150, 20))
         self.radioButton_5.setObjectName("radioButton_5")
-        self.radioButton_5.setCheckable(True)
-        self.radioButton_5.setChecked(True)
-        self.radioButton_5.setAutoRepeat(True)
+        self.radioButton_4.setCheckable(True)
+        self.radioButton_4.setChecked(True)
+        self.radioButton_4.setAutoRepeat(True)
                 
      #Grupo Directorios
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab_2)
