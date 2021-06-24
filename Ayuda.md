@@ -71,12 +71,12 @@ Tal como sus nombres indican sirven para Iniciar, Pausar y Reiniciar el sensor.
 ### _Configuración_:
 
   <p align="center">
-  <img src=https://github.com/El-Ethanol/Servicio-Social/blob/fce01dcd3d6676625b678aa82989e4819ea40956/Configuraci%C3%B3n.png />
+  <img src=https://github.com/El-Ethanol/Stuff/blob/master/Venta%20Configuraci%C3%B3n.png/>
 </p>
 
-En esta pestaña se encuentran 2 grupos.
+En esta pestaña se encuentran 3 grupos.
 
-El grupo para elegir el puerto (en el cuál está conectado el sensor) y el grupo dónde se pueden elegir los directorios donde se guardan los datos y la gráfica (como se menciona en el punto *4.* de la sección anterior.)
+El grupo para elegir el puerto (en el cuál está conectado el sensor), el grupo para activar o desactivar el guardado de datos y el grupo dónde se pueden elegir los directorios donde se guardan los datos y la gráfica (como se menciona en el punto *4.* de la sección anterior.)
 
 
 
