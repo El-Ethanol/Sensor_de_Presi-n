@@ -181,16 +181,13 @@ class Ui_MainWindow(object):
         self.groupBox_3.setGeometry(QtCore.QRect(220, 30, 191, 95))
         self.groupBox_3.setStyleSheet("background-color: rgb(64, 64, 64); color: rgb(255, 255, 255);")
         self.groupBox_3.setObjectName("groupBox_3")
-        self.label_8 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_8.setGeometry(QtCore.QRect(10,20, 120, 15))
-        self.label_8.setObjectName("label_8")
-        
+      
        #Botón Guardado Automático
         self.radioButton_4 = QtWidgets.QRadioButton(self.groupBox_3)
-        self.radioButton_4.setGeometry(QtCore.QRect(10, 40, 89, 20))
+        self.radioButton_4.setGeometry(QtCore.QRect(10, 30, 89, 20))
         self.radioButton_4.setObjectName("radioButton_4")
         self.radioButton_5 = QtWidgets.QRadioButton(self.groupBox_3)
-        self.radioButton_5.setGeometry(QtCore.QRect(10, 60, 150, 20))
+        self.radioButton_5.setGeometry(QtCore.QRect(10, 50, 150, 20))
         self.radioButton_5.setObjectName("radioButton_5")
         self.radioButton_4.setCheckable(True)
         self.radioButton_4.setChecked(True)
@@ -306,7 +303,6 @@ class Ui_MainWindow(object):
         self.groupBox_3.setTitle(_translate("MainWindow","Guardado Automático:"))
         self.radioButton_4.setText(_translate("MainWindow", "Activado"))
         self.radioButton_5.setText(_translate("MainWindow", "Desactivado"))
-        self.label_8.setText(_translate("MainWindow", "(Archivos .csv)"))
         self.tabs.setTabText(self.tabs.indexOf(self.tab_3), _translate("MainWindow", "Ayuda"))
         self.label_2.setText(_translate("MainWindow", "    Para más información:"))
         self.label_7.setText(_translate("MainWindow", "Ethan Campos Méndez, México 2021"))

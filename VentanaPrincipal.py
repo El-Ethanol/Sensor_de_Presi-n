@@ -299,6 +299,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow): #Main Window
          QtTest.QTest.qWait(2500)
          if self.startg:
             self.curve.plot(self.t,self.DatosGraf,pen=pg.mkPen('r', width=2))
+         exporter = pg.exporters.ImageExporter(self.curve.plotItem)
+         exporter.export('/home/detectores/Software/mks_control/Graficas_Presion/grafica.png')
    
      #Funciones para determinar el tiempo
       def T_Determinado(self):
